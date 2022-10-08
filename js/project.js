@@ -1,7 +1,4 @@
-//SEGUNDA PRE ENTREGA PROYECTO FINAL
-
-//OBJETO - clase constructora
-
+//OBJETO SUCURSALES - clase constructora
 class Sucursales{
     constructor(direccion, zona, telefono, imagen){        
         this.direccion = direccion,
@@ -13,29 +10,6 @@ class Sucursales{
         console.log(`Visita nuestras sucursales:\nNOMBRE: Farmacia Ivo\nZONA: ${zona}\nDIRECCIÓN: ${direccion}\nTELEFONO: ${telefono}`)
     }
 }
-//Instanciación de Objetos - PRODUCTOS DE FARMACIA Y SUCURSALES
-//PRODUCTOS
-// const producto1 = new Farmacia(0, "Bagó", "Tafirol", 250, "tafirol.jpg")
-
-// const producto2 = new Farmacia(1, "Bagó", "Ibupirac", 450, "ibupirac.png")
-
-// const producto3 = new Farmacia(2, "Bayer", "Bayaspirina", 455, "bayaspirina.jpg")
-
-// const producto4 = new Farmacia(3, "Roemmers", "Amoxidal", 950, "amoxi.png")
-
-// const producto5 = new Farmacia(4, "Cassara", "Betacort Plus", 700, "betacor.jpg")
-
-// const producto6 = new Farmacia(5, "Ciccarelli", "Agua Oxigenada", 150, "agua.png")
-
-// const producto7 = new Farmacia(6, "Ciccarelli", "Gazas", 280, "gazas.jpg")
-
-// const producto8 = new Farmacia(7, "Medigen", "Salbutamol", 550, "salbutam.jpg")
-
-// const producto9 = new Farmacia(8, "Porta", "Bi Alcohol 500ml", 700, "alcoho.jpg")
-
-// const producto10 = new Farmacia(9, "Bayer", "Merthiolate", 400, "merthi.jpg")
-
-// const producto11 = new Farmacia(10, "Elea", "Alernix Rapida Acción", 325, "alernix.png")
 
 //SUCURSALES
 const sucursal1 = new Sucursales("Bajada Puccio 1552", "NORTE", 4251236, "sucursal.jpg")
@@ -48,11 +22,6 @@ const sucursal4 = new Sucursales("Pellegrini 6523", "OESTE", 4362145, "sucursal.
 
 const sucursal5 = new Sucursales("Bv. Seguí 6411", "SUDOESTE", 4302562, "sucursal.jpg")
 
-//ARRAY CON LOS PRODUCTOS
-//const stock = [producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8, producto9, producto10, producto11]
-// const stock = []
-// stock.push(producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8, producto9, producto10, producto11)
-
 //ARRAY CON SUCURSALES
 const locales = [sucursal1, sucursal2, sucursal3, sucursal4, sucursal5]
 
@@ -62,96 +31,233 @@ const locales = [sucursal1, sucursal2, sucursal3, sucursal4, sucursal5]
 
 
 //VARIABLES
-let productos_stock = document.getElementById("productos") //PRODUCTOS EN STOCK
+let botonCarrito = document.getElementById("boton_carrito")//BOTON DEL CARRITO
+
+let modalBody = document.getElementById("modal-body")// MODAL DE LA CARD
+
+let btnFinalizarCompra = document.getElementById("btnFinalizarCompra")//BOTON PARA FINALIZAR LA COMPRA DEL CARRITO
+
+let totalCompra = document.getElementById("precioTotal") //PARA EL PRECIO TOTAL
+
+let divProductos = document.getElementById("productos") // DIV DONDE SE VA A CARGAR EL CATALOGO
+
+let divFechaHoy = document.getElementById("fechaHoy") // MANTIENE LA FECHA ACTUALIZADA
+
+let btnOcultarCatalogo = document.getElementById("ocultar_catalogo")//BOTON PARA OCULTAR CATALOGO
+
+let btnMostrarCatalogo = document.getElementById("ver_catalogo")//BOTON PARA MOSTRAR CATALOGO
+
+let btn_vaciar = document.getElementById("btn_vaciar") // BOTON PARA VACIAR EL CARRITO
 
 let mis_sucursales = document.getElementById("sucursales") //SUCURSALES
-
-let btn_catalogo = document.getElementById("ver_catalogo") //BOTON DEL CATALOGO
-
-let btn_ocultar = document.getElementById("ocultar_catalogo") //BOTON OCULTAR CATALOGO
 
 let btn_sucursal = document.getElementById("ver_sucu") //BOTON VER SUCURSAL
 
 let btn_ocultar_sucu = document.getElementById("ocultar_sucu") //BOTON OCULTAR SOCURSAL
+let btnBuscar = document.getElementById("btnBuscar")// BOTON BUSCADOR
 
-let destacados = [] //PARA ARRAY DE DESTACADOS
+let buscador = document.getElementById("buscador")//BUSCADOR
 
-let productos_carrito =  [] // PARA ARRAY DE LOS PRODUCTOS QUE ENTRAN AL CARRITO
+//SETEANDO FECHA Y HORA CON LUXON
+const DateTime = luxon.DateTime
+const fechaAhora = DateTime.now()
 
-let boton_carrito = document.getElementById("boton_carrito") // BOTON DEL CARRITO
-
-let eliminar_producto = document.getElementById("btn_eliminar")
-
-let modal_body = document.getElementById("modal-body") // MODAL DE LA CARD DE LOS PRODUCTOS DEL CARRITO
-
-let btn_finalizar = document.getElementById("btnFinalizarCompra") // BOTON PARA FINALIZAR COMPRA
-
-let btn_vaciar = document.getElementById("btn_vaciar") // BOTON PARA VACIAR EL CARRITO
-
-let precio_total = document.getElementById('precioTotal') // PARA CALCULAR PRECIO TOTAL
-
-
-
+let fecha = fechaAhora.toLocaleString(DateTime.DATE_FULL)
+divFechaHoy.innerHTML = `${fecha}`
 
 //FUNCIONES
-//----------------- AGREGAR PRODUCTOS AL CARRITO
-function agregar_carrito(Farmacia){
-    productos_carrito =[...productos_carrito, Farmacia] // DESESTRUCTURAR CON SPREAD    
-    console.log(productos_carrito)
-}
-
-//------------------ MOSTRAR CATALOGO
-
-function mostrarCatalogo(array){ 
-
-    productos_stock.innerHTML = ""
-    array.forEach((Farmacia)=>{
-        let stock_card = document.createElement("div")
-        stock_card.innerHTML = `<div id="${Farmacia.id}" class="card d-flex justify-content-start" style="width: 18rem;">
-                                    <img class="card-img-top" style="height: 250px;" src="sources/${Farmacia.imagen}" alt="${Farmacia.producto} de Laboratorios: ${Farmacia.laboratorio}">
-                                    <div class="card-body">
-                                        <h4 class="card-title">${Farmacia.producto}</h4>
-                                        <p>Laboratorio: ${Farmacia.laboratorio}</p>
-                                        <p class="">Precio: $${Farmacia.precio}</p>
-                                        <button id="comprar_producto${Farmacia.id}" class="btn btn-outline-primary btn_compra">Agregar al carrito</button>
-                                    </div>
-                                    
-        </div>`
-        productos_stock.append(stock_card)
-
-        let btnCompra = document.getElementById(`comprar_producto${Farmacia.id}`)
-        console.log(btnCompra)        
-        btnCompra.addEventListener("click", ()=>{
-            console.log(Farmacia)
-            agregar_carrito(Farmacia)
-            localStorage.setItem("productos_carrito", JSON.stringify(productos_carrito))
-            Toastify({
-              text: `Se ha agregado ${Farmacia.producto} al carrito`,
-              duration: 3000,
-              destination: "https://github.com/apvarun/toastify-js",
-              newWindow: true,
-              close: true,
-              gravity: "bottom", // `top` or `bottom`
-              position: "right", // `left`, `center` or `right`
-              stopOnFocus: true, // Prevents dismissing of toast on hover
-              style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-              },
-              onClick: function(){} // Callback after click
-            }).showToast();
-        })
-    })
-
+//--------------- MOSTRAR CATALOGO
+function mostrarCatalogo(array){
     
-}
+  divProductos.innerHTML = ""
+  array.forEach((item)=>{
+      let nuevoProducto = document.createElement("div")
+      nuevoProducto.innerHTML = `<div id="${item.id}" class="card" style="width: 18rem;">
+                                  <img class="card-img-top" style="height: 250px;" src="sources/${item.imagen}" alt="${item.producto} de Laboratorio ${item.laboratorio}">
+                                  <div class="card-body">
+                                      <h4 class="card-title">${item.producto}</h4>
+                                      <p>Laboratorio: ${item.laboratorio}</p>
+                                      <p class="${item.precio <= 500 ? "ofertaColor" : "precioComun"}">Precio: ${item.precio}</p>
+                                      <button id="agregarBtn${item.id}" class="btn btn-outline-success btnComprar">Agregar al carrito</button>
+                                  </div>
+      </div>`
+      divProductos.append(nuevoProducto)
 
-//---------------- PARA ESCONDER EL CATALOGO
+      let btnAgregar = document.getElementById(`agregarBtn${item.id}`)
+      console.log(btnAgregar)
+      btnAgregar.addEventListener("click", ()=>{
+          console.log(item)
+          agregarAlCarrito(item)
+          
+      })
+  })
+
+
+}
+//--------------- OCULTAR CATALOGO
 function ocultarCatalogo(){
-    productos_stock.innerHTML = ""
+  divProductos.innerHTML = ""
 }
 
- //--------------- MOSTRAR LAS SUCURSALES
+//--------------- AGREGAR AL CARRITO
+function agregarAlCarrito(item){
+  let productoAgregado = productosEnCarrito.find((elem)=> (elem.id == item.id))
+  console.log(productoAgregado)  
+  if(productoAgregado == undefined){
+      productosEnCarrito.push(item)      
+      localStorage.setItem("carrito", JSON.stringify(productosEnCarrito))     
+     
+      Toastify({
+        text: `${item.producto} se ha agregado`,
+        offset: {
+          x: 50, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+          y: 10 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+        },
+      }).showToast();
 
+  }else{     
+      console.log(`El producto ${item.producto} de Laboratorios ${item.laboratorio} ya se encuentra en el carrito`)
+      Toastify({
+        text: `${item.producto} Ya se encuentra en el carrito`,
+        offset: {
+          x: 50, // horizontal axis - can be a number or a string indicating unity. eg: '2em'
+          y: 10 // vertical axis - can be a number or a string indicating unity. eg: '2em'
+        },
+      }).showToast();
+  }
+  
+}
+
+//--------------- CARGAR EL CARRITO
+function cargarProductosCarrito(array){
+    
+  modalBody.innerHTML = ""
+  
+  array.forEach((productoCarrito)=>{
+     
+      modalBody.innerHTML += `
+      <div class="card border-primary mb-3" id ="productoCarrito${productoCarrito.id}" style="max-width: 540px;">
+          <img class="card-img-top" height="300px" src="sources/${productoCarrito.imagen}" alt="${productoCarrito.producto}">
+          <div class="card-body">
+                  <h4 class="card-title">${productoCarrito.producto}</h4>
+              
+                  <p class="card-text">$${productoCarrito.precio}</p> 
+                  <button class= "btn btn-danger" id="botonEliminar${productoCarrito.id}"><i class="fas fa-trash-alt"></i></button>
+          </div>    
+      
+      
+      </div>
+`
+
+console.log(document.getElementById(`botonEliminar${productoCarrito.id}`)  )
+})
+array.forEach((productoCarrito, index)=>{
+  document.getElementById(`botonEliminar${productoCarrito.id}`).addEventListener("click",()=>{
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: `El producto eliminado es ${productoCarrito.titulo}`,
+      showConfirmButton: false,
+      timer: 1500
+    })      
+      //para borrarlo del array      
+      array.splice(index, 1)
+      console.log(array)
+      //para borrarlo del storage
+      localStorage.setItem("carrito", JSON.stringify(array))
+      //para borrarlo del DOM
+      let cardProducto = document.getElementById(`productoCarrito${productoCarrito.id}`)
+      console.log(cardProducto)
+      cardProducto.remove()
+      //Recalcula total
+      compraTotal(array)
+      
+
+  })
+}) 
+  compraTotal(array)
+}
+//--------------- COMPRA TOTAL
+function compraTotal(array){
+  let acumulador = 0
+  
+  acumulador = array.reduce((acumulador, productoCarrito)=>{
+      return acumulador + productoCarrito.precio
+  },0)
+  
+  acumulador == 0 ? totalCompra.innerHTML = `<p id="textoCarrito">No hay productos en el carrito</p>` : totalCompra.innerHTML = `Hasta el momento. el total de su compra es: $${acumulador}`
+}
+
+//--------------- FINALIZAR COMPRA
+function finalizarCompra(){
+  //PReguntar si ta seguro
+  Swal.fire({
+      title: 'Desea finalizar su compra?',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      confirmButtonColor: 'green',
+      cancelButtonColor: 'red',
+  }).then((result)=>{
+      if(result.isConfirmed){
+          Swal.fire({
+          title: 'Su compra se ha realizado con exito',
+          icon: 'success',
+          confirmButtonColor: 'green',
+          text: `Muchas gracias, los productos han sido adquiridos `,
+          })
+          productosEnCarrito =[]
+          localStorage.removeItem("carrito")
+          
+      }else{          
+          Swal.fire({
+              title: 'No se ha realizado su compra',
+              icon: 'info',
+              text: `Los productos siguen en el carrito`,
+              confirmButtonColor: 'green',
+              timer:3500
+          })
+      }
+  })
+}
+
+function vaciarCarrito(){
+  Swal.fire({
+    title: 'Desea vaciar el carrito?',
+    icon: 'info',
+    showCancelButton: true,
+    confirmButtonText: 'Sí',
+    cancelButtonText: 'No',
+    confirmButtonColor: 'green',
+    cancelButtonColor: 'red',
+}).then((result)=>{
+    if(result.isConfirmed){
+        localStorage.clear()
+        Swal.fire({
+        title: 'Su carrito ahora se encuentra vacio',
+        icon: 'success',
+        confirmButtonColor: 'green',
+        text: `Se han eliminado todos los productos `,
+        })
+        productosEnCarrito =[]
+        cargarProductosCarrito(productosEnCarrito).remove()
+        localStorage.removeItem("carrito")
+        
+    }else{          
+        Swal.fire({
+            title: 'No se ha realizado la accion',
+            icon: 'info',
+            text: `Los productos siguen en el carrito`,
+            confirmButtonColor: 'green',
+            timer:3500
+        })
+    }
+})
+}
+
+
+//--------------- MOSTRAR LAS SUCURSALES
 function mostrarSucursales(array){ 
     mis_sucursales.innerHTML = ""
     array.forEach((locales)=>{
@@ -187,109 +293,34 @@ function ocultarSucu(){
     mis_sucursales.innerHTML = ""
 }
 
-// --------------- PARA LLENAR y BORRAR EL CARRITO EL CARRITO
-function llenar_carrito(array){
-    
-    modal_body.innerHTML = ""
-    array.forEach((producto_carrito)=>{
 
-        modal_body.innerHTML += `
-        <div class="card_carrito card border-primary mb-3" id ="productoCarrito${producto_carrito.id}" style="max-width: 540px;">
-            <img class="card-img-top" src="./sources/${producto_carrito.imagen}" alt="${producto_carrito.titulo}">
-            <div class="card-body">
-                    <h4 class="card-title">${producto_carrito.producto}</h4>
-                
-                    <p class="card-text">$${producto_carrito.precio}</p> 
-                    <button id="btn_eliminar${productos_carrito.id}" class= "btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-            </div>  
-             
-        </div>
-`
-
-//modal_body.append(productos_carrito)
-     //PARA ELIMINAR CADA PRODUCTO   
-     let btn_elimina = document.getElementById(`btn_eliminar${productos_carrito.id}`)
-     let id = producto_carrito.id
-
-     btn_elimina.addEventListener("click", ()=>{       
-        
-        const swalWithBootstrapButtons = Swal.mixin({
-            customClass: {
-              confirmButton: 'btn btn-success',
-              cancelButton: 'btn btn-danger'
-            },
-            buttonsStyling: false
-          })
-          
-          swalWithBootstrapButtons.fire({
-            title: 'ESTAS SEGURO?',
-            text: "EL PRODUCTO DESAPARECERÁ DEL CARRITO",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si, Quitar',
-            cancelButtonText: 'No, cancelar!',
-            reverseButtons: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-              let productosIndex = productos_carrito.findIndex(element => element.id == id)
-              productos_carrito.splice(productosIndex, 1)        
-              localStorage.setItem("productos_carrito", JSON.stringify(productos_carrito))
-              llenar_carrito(productos_carrito)              
-              swalWithBootstrapButtons.fire(
-                'Borrado!',
-                'El producto Ha sido quitado del Carrito',
-                'success'
-              )
-            } else if (
-              /* Read more about handling dismissals below */
-              result.dismiss === Swal.DismissReason.cancel
-            ) {
-              swalWithBootstrapButtons.fire(
-                'Cancelado',
-                'Su producto se encuentra a salvo',
-                'error'
-              )
-            }
-          })
-        
-     })
-    })
-    
-    total_compra(array)
-}
-
-productos_carrito = JSON.parse(localStorage.getItem("productos_carrito")) || [] // OPERADOR LOGICO OR
-
-//--------------- PARA CALCULAR EL PRECIO TOTAl
-function total_compra(array){
-    let acumulador = 0
-    acumulador = array.reduce((acumulador, producto_carrito)=>{
-        return acumulador + producto_carrito.precio
-    },0) 
-       
-    acumulador == 0 ? precio_total.innerHTML = `<strong>El carrito esta vacio</strong>` : precio_total.innerHTML = `El precio total es de: $${acumulador}` // Aquí utilicé operador ternario
-    
-} 
 
 
 
 
 //BOTONES Y EVENT LISTENERS
+//-------------- BOTON PARA MOSTRAR CATALOGO
+btnMostrarCatalogo.addEventListener("click", ()=>{
+  let divLoader = document.getElementById("loader")
+  divLoader.innerHTML = `<H5 id="h5_loader">Cargando catalogo, aguarde un momento por favor</H5>`
+  setTimeout(()=>{
+      divLoader.remove()
+      mostrarCatalogo(stock)
 
-// -------------- BOTON PARA MOSTRAR PRODUCTOS
-
-btn_catalogo.addEventListener("click", ()=>{
-    mostrarCatalogo(stock)
-    localStorage.setItem("destacados", JSON.stringify(stock) )
-    if(localStorage.getItem("destacados")){
-    destacados = JSON.parse(localStorage.getItem("destacados"))
-}
+  },3000)
 })
 
-//--------------- BOTON PARA OCULTAR EL CATALOGO
-btn_ocultar.onclick = ocultarCatalogo
+//--------------- BOTON FINALIZAR COMPRA
+btnFinalizarCompra.addEventListener("click", ()=>{finalizarCompra()})
 
-// -------------- BOTON PARA MOSTRAR SUCURSALES
+//--------------- BOTON OCULTAR CATALOGO
+btnOcultarCatalogo.onclick = ocultarCatalogo
+
+//--------------- BOTON CARRITO
+botonCarrito.addEventListener("click", ()=>{
+    cargarProductosCarrito(productosEnCarrito)
+})
+//--------------- BOTON PARA MOSTRAR SUCURSALES
 
 btn_sucursal.addEventListener("click", ()=>{
     mostrarSucursales(locales)
@@ -299,55 +330,33 @@ btn_sucursal.addEventListener("click", ()=>{
 
 btn_ocultar_sucu.onclick = ocultarSucu
 
-//--------------- BOTON DEL CARRITO
-boton_carrito.addEventListener("click", ()=>{
-    llenar_carrito(productos_carrito)
-})
-
-//-------------- BOTON PARA FINALIZAR COMPRA
-btn_finalizar.addEventListener("click", () =>{
-    Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Muchas gracias por su compra',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      productos_carrito = []      
-      localStorage.clear();
-})
-
 //-------------- BOTON PARA VACIAR EL CARRITO
 btn_vaciar.addEventListener("click", () =>{
-  Swal.fire({
-    title: 'Desea vaciar el carrito?',
-    text: "Si acepta no podrá volver atrás",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#3085d6',
-    cancelButtonColor: '#d33',
-    confirmButtonText: 'Vaciar'
-  }).then((result) => {
-    if (result.isConfirmed) { 
-      localStorage.clear();     
-      Swal.fire(
-        'Carrito Vacio',
-        'Sus artículos se han eliminado',
-        'success'
-      )       
-      productos_carrito = []    
-      llenar_carrito(productos_carrito).remove()    
-      
-    }
-    
-  })        
+  vaciarCarrito()       
      
 })
 
+//-------------- BOTON DE BUSQUEDA, Y FILTRO
+btnBuscar.addEventListener("click", ()=>{
+  event.preventDefault()  
+  console.log(buscador.value)
+  let productoBuscado = stock.filter(item => item.producto.toLowerCase() == buscador.value.toLowerCase())
+  console.log(productoBuscado)
+  if(productoBuscado.length == 0){
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'El producto solicitado no se encuentra en stock en este momento',
+      footer: '<a href="/index.html">Volver a intentar</a>'
+    })      
+  }else{
+      //Modificar DOM
+      
+  }
+})
 
-//STORAGE
-// -------------- SETEANDO STORAGE
-localStorage.getItem("destacados") ? destacados = JSON.parse(localStorage.getItem("destacados")) :  (console.log("Seteando por primera vez el array"))&&(destacados.push(producto1, producto2, producto3, producto4, producto5, producto6, producto7, producto8, producto9, producto10, producto11))&&(localStorage.setItem("stock", JSON.stringify(destacados) )); //UTILICÉ OPERADORES TERNARIOS Y AND &&
+
+
 
 
 
